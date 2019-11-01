@@ -26,13 +26,31 @@ Demonstrate your understanding of this Sprint's concepts by answering the follow
 
 - [ ] Mention two parts of Express that you learned about this week.
 
+    ( 1 ) Express makes communicating between the client and server seemless because it's taken care of for you with the Express framework
+        ( 1a ) It lets us define responses for any matching requests that we've configured ie (where the url, the parameters, http method match what we've declared using express
+    ( 2 ) It takes care of the listening, and all the hard work to create restful apis 
+        ( 2a ) Just as we dont have to worry about know the nitty gritty of how to make the HTTP request from the client using axios, express does the same thing for us on the server
+
 - [ ] Describe Middleware?
+
+    - There are three types: 
+          - built-in: routers, json, etc
+          - third-party: morgan. helmet, cors -- allows you to do things that express doesnt have built in
+          - custom: that we build - like letting the client know if they tried to reach the wrong uri
+    - All of them are giving me some level of reuse
+    - Augmenting express
 
 - [ ] Describe a Resource?
 
+    - Resources are like entities : users/posts/ things you wrap with CRUD operations
+
 - [ ] What can the API return to help clients know if a request was successful?
 
+    - Within the REST convention, status codes hold particular meanings (ok, error)
+
 - [ ] How can we partition our application into sub-applications?
+
+    - By using routers for each resource (users, posts)
 
 ## Project Setup
 
