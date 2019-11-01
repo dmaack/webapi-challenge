@@ -30,13 +30,34 @@ projectRouter.get('/', (req,res) => {
     })
 })
 
-projectRouter.get('/:d', validateProjectId, (req, res) => {
+projectRouter.get('/:id', validateProjectId, (req,res) => {
+    const id = req.params.id;
+
+    projectModel.get(id)
+    .then(project => {
+        res.status(200).json(project)
+    })
+    .catch(() => {
+        res.status(500).json({ error: 'Server error'})
+    })
+})
+
+projectRouter.get('/:id/actions', validateProjectId, (req, res) => {
     const id = req.params.id;
 
     projectModel.getProjectActions(id)
-    .then()
-    .catch()
+    .then(actions => {
+        if(actions) {
+            res.status(200).json(actions)
+        } else {
+            res.status(404).json({ error: 'No actions for this project ID'})
+        }
+    })
+    .catch(() => {
+        res.status(500).json({error: 'Server error'})
+    })
 })
+
 
 // UPDATE Requests
 projectRouter.put('/:id', validateProjectBody, (req,res) => {

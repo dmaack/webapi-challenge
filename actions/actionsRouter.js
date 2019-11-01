@@ -29,37 +29,49 @@ actionRouter.get('/', (req,res) => {
     })
 })
 
-actionRouter.get('/project_id', (req,res) => {
-    const project_id = req.params.id;
+actionRouter.get('/:id', (req,res) => {
+    const id = req.params.id;
     
-    
+    actionModel.get(id)
+    .then(action => {
+        res.status(200).json(action)
+    })
+    .catch(() => {
+        res.status(500).json({ error: 'Server error'})
+    })  
 })
 
 // UPDATE Requests
 
-actionRouter.put('/:id', (req,res) => {
+actionRouter.put('/:id', validateActionBody, (req,res) => {
     const id = req.params.id;
     const updates = req.body;
 
-    if(!updates.description || !updates.notes) {
-        res.status(400).json({ error: 'Please provide a description AND notes for the action'})
-    } else {
-        actionModel.update(id, updates)
-        .then(action => {
-            if(action) {
-                res.status(201).json(action)
-            } else {
-                res.status(500).json({ error: "There was an error while saving the description or note to the database" })
-            }
-        })
-        .catch(() => {
-           res.status(500).json({ error: "Server error" })
-        })
-    }
+    actionModel.update(id, updates)
+    .then(action => {
+        res.status(200).json(action)
+    })
+    .catch(() => {
+        res.status(500).json({ error: 'Server error'})
+    })
+
+    // if(!updates.description || !updates.notes) {
+    //     res.status(400).json({ error: 'Please provide a description AND notes for the action'})
+    // } else {
+    //     actionModel.update(id, updates)
+    //     .then(action => {
+    //         if(action) {
+    //             res.status(201).json(action)
+    //         } else {
+    //             res.status(500).json({ error: "There was an error while saving the description or note to the database" })
+    //         }
+    //     })
+    //     .catch(() => {
+    //        res.status(500).json({ error: "Server error" })
+    //     })
+    // }
 
 })
-
-
 
 // DELETE Requests
 
@@ -77,9 +89,6 @@ actionRouter.delete('/:id', (req,res) => {
         .catch(() => {
             res.status(500).json({error: 'Server error'})
         })
-   
-    
-    
 })
 
 // Middleware 
@@ -101,7 +110,6 @@ function validateProjectId(req, res, next) {
     } else {
         next()
     }
-
 };
 
 function validateActionBody(req, res, next) {
