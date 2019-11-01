@@ -1,13 +1,13 @@
 const express = require('express')
 const actionsRouter = require('./actions/actionsRouter')
-const projecstRouter = require('./projects/projectsRouter')
+const projectsRouter = require('./projects/projectsRouter')
 
 const server = express();
 
 server.use(express.json());
 server.use(logger);
 server.use('/actions', actionsRouter);
-server.use('/projects', projecstRouter);
+server.use('/projects', projectsRouter);
 server.use((req, res) => {
     res.status(404).send('Aint nobody got time for that!')
   })
