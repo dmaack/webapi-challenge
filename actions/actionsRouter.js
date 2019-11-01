@@ -6,7 +6,7 @@ const actionRouter = express.Router();
 
 // CREATE Requests
 
-actionRouter.post('/', validateProjectId, validateBody, (req,res) => {
+actionRouter.post('/', validateProjectId, validateActionBody, (req,res) => {
    // const { description, notes} = req.body
     actionModel.insert(req.body)
     .then(action => {
@@ -97,7 +97,7 @@ function validateProjectId(req, res, next) {
 
 };
 
-function validateBody(req, res, next) {
+function validateActionBody(req, res, next) {
     if(req.body.description === undefined || req.body.notes === undefined) {
         res.status(400).json({ error: 'Please provide a description and notes for action'})
     } else {
