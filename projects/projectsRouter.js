@@ -14,18 +14,6 @@ projectRouter.post('/', validateProjectBody, (req,res) => {
     .catch(() => {
         res.status(500).json({ error: 'Server error'})
     })
-
-    // if(!name || ! description) {
-    //     res.status(400).json({error: "Please provide a name and description for the project."})
-    // } else {
-    //     projectModel.insert(req.body)
-    //     .then(project => {
-    //         res.status(201).json(project)
-    //     })
-    //     .catch(() => {
-    //         res.status(500).json({ error: "There was an error while saving the project to the database" })
-    //     })
-    // }
    
 })
 
@@ -42,7 +30,7 @@ projectRouter.get('/', (req,res) => {
     })
 })
 
-projectRouter.get('/:d', (req, res) => {
+projectRouter.get('/:d', validateProjectId, (req, res) => {
     const id = req.params.id;
 
     projectModel.getProjectActions(id)
@@ -66,7 +54,17 @@ projectRouter.put('/:id', validateProjectBody, (req,res) => {
 
 
 // DELETE Requests
+projectRouter.delete('/:id', validateProjectId, (req,res) => {
+    const id = req.params.id;
 
+    projectModel.remove(id)
+    .then(() => {
+        res.status(200).send(`You successfully deleted the PROJECT with ID ${id}`)
+    })
+    .catch(() => {
+        res.status(500).json({error: 'Server error'})
+    })
+})
 
 //Middleware
 
@@ -77,6 +75,27 @@ function validateProjectBody(req, res, next) {
     } else {
         next()
     }
+}
+
+function validateProjectId(req, res, next) {
+    const id = req.params.id
+    
+    if(id) {
+        projectModel.get(id)
+        .then(project =>{
+            if(project) {
+                next();
+            } else {
+                res.status(400).json({ message: "invalid project id" })
+            }
+        })
+        .catch(() => {
+            res.status(500).json({ error: 'server error'})
+        })
+    } else {
+        next()
+    }
+
 }
 
 module.exports = projectRouter;

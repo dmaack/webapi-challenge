@@ -66,13 +66,20 @@ actionRouter.put('/:id', (req,res) => {
 actionRouter.delete('/:id', (req,res) => {
     const id = req.params.id;
 
-    actionModel.remove(id)
-    .then(() => {
-        res.status(200).send(`You successfully deleted the action with ID ${id}`)
-    })
-    .catch(() => {
-        res.status(500).json({error: 'Server error'})
-    })
+        actionModel.remove(id)
+        .then(action => {
+            if(action) {
+                res.status(200).send(`You successfully deleted the ACTION with ID ${id}`)
+            } else {
+                res.status(400).json({ message: "invalid project id" })
+            }
+        })
+        .catch(() => {
+            res.status(500).json({error: 'Server error'})
+        })
+   
+    
+    
 })
 
 // Middleware 
@@ -80,7 +87,7 @@ actionRouter.delete('/:id', (req,res) => {
 function validateProjectId(req, res, next) {
     const id = req.body.project_id
     if(id) {
-        projectModel.get(id)
+        actionModel.get(id)
         .then(project =>{
             if(project) {
                 next();
